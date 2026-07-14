@@ -282,6 +282,19 @@ function App() {
 				Space — play/pause&ensp;·&ensp;click the waveform to seek&ensp;·&ensp;
 				faders work live during playback
 			</footer>
+
+			<section className="about">
+				<h2>A slowed + reverb editor that runs entirely in your browser</h2>
+				<p>
+					Drop in any mp3, wav, m4a or flac and shape it live: slow the
+					tempo down for that classic slowed sound, shift the pitch up or
+					down independently of speed, layer in reverb for space and depth,
+					or push the bass for more weight. Every fader updates the sound
+					instantly while it plays — nothing is uploaded to a server, and
+					nothing is processed until you hit play. When you're happy with
+					the mix, download it as a lossless WAV or a compressed MP3.
+				</p>
+			</section>
 		</main>
 	);
 }
