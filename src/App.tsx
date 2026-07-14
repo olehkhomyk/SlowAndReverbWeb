@@ -95,6 +95,29 @@ function App() {
 		engineRef.current?.setBassBoost(value);
 	};
 
+	const isDefault = speed === 1 && pitch === 0 && reverb === 0 && bass === 0;
+
+	const handleReset = () => {
+		const engine = engineRef.current;
+		setSpeed(1);
+		setPitch(0);
+		setReverb(0);
+		setBass(0);
+		engine?.setRate(1);
+		engine?.setPitch(0);
+		engine?.setReverb(0);
+		engine?.setBassBoost(0);
+	};
+
+	const handleRemoveTrack = () => {
+		engineRef.current?.unload();
+		setBuffer(null);
+		setTrackName('');
+		setPlaying(false);
+		setPosition(0);
+		setError('');
+	};
+
 	const handleExport = async (format: ExportFormat) => {
 		const engine = engineRef.current;
 		if (!engine || !buffer || exporting) return;
@@ -193,8 +216,37 @@ function App() {
 							<span className="track-time">
                 <b>{formatTime(position)}</b> / {formatTime(buffer.duration)}
               </span>
+							<button
+								className="icon-button"
+								onClick={handleRemoveTrack}
+								aria-label="Remove track"
+								title="Remove track"
+							>
+								<svg viewBox="0 0 16 16" aria-hidden="true">
+									<path d="M4 4l8 8M12 4l-8 8"/>
+								</svg>
+							</button>
 						</div>
-						<Waveform buffer={buffer} position={position} onSeek={handleSeek}/>
+						<div className="wave-row">
+							<button
+								className="transport"
+								onClick={() => void togglePlay()}
+								disabled={!buffer}
+								aria-label={playing ? 'Pause' : 'Play'}
+							>
+								{playing ? (
+									<svg viewBox="0 0 24 24" aria-hidden="true">
+										<rect x="6" y="5" width="4" height="14"/>
+										<rect x="14" y="5" width="4" height="14"/>
+									</svg>
+								) : (
+									<svg viewBox="0 0 24 24" aria-hidden="true">
+										<path d="M8 5l12 7-12 7z"/>
+									</svg>
+								)}
+							</button>
+							<Waveform buffer={buffer} position={position} onSeek={handleSeek}/>
+						</div>
 					</>
 				) : (
 					<label className="drop-zone">
@@ -208,28 +260,18 @@ function App() {
 				{error && <p className="load-error">{error}</p>}
 			</section>
 
-			<section className="console">
-				<div className="transport-module">
-					<button
-						className="transport"
-						onClick={() => void togglePlay()}
-						disabled={!buffer}
-						aria-label={playing ? 'Pause' : 'Play'}
-					>
-						{playing ? (
-							<svg viewBox="0 0 24 24" aria-hidden="true">
-								<rect x="6" y="5" width="4" height="14"/>
-								<rect x="14" y="5" width="4" height="14"/>
-							</svg>
-						) : (
-							<svg viewBox="0 0 24 24" aria-hidden="true">
-								<path d="M8 5l12 7-12 7z"/>
-							</svg>
-						)}
-					</button>
-					<span className="transport-label">{playing ? 'Pause' : 'Play'}</span>
-				</div>
+			<div className="console-bar">
+				<span className="console-title">Effects</span>
+				<button
+					className="text-button"
+					onClick={handleReset}
+					disabled={isDefault}
+				>
+					Reset
+				</button>
+			</div>
 
+			<section className="console">
 				<Fader
 					label="Speed"
 					value={speed}

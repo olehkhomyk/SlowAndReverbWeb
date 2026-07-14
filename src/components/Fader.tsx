@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties, KeyboardEvent, PointerEvent } from 'react';
 
 interface FaderProps {
@@ -31,12 +31,20 @@ export default function Fader({
                               }: FaderProps) {
 	const trackRef = useRef<HTMLDivElement>(null);
 	const dragging = useRef(false);
+	const [editing, setEditing] = useState(false);
+	const [draft, setDraft] = useState('');
+	const inputRef = useRef<HTMLInputElement>(null);
 
+	// Typed values can land outside [min, max]; the track only ever draws
+	// a clamped position so the cap/fill just pin to the edge instead of
+	// breaking the geometry. Dragging or the keyboard resumes from here,
+	// so the fader snaps back into range the moment it's touched.
+	const clamped = clamp(value, min, max);
 	const ratio = (v: number) => (v - min) / (max - min);
 
-	const valueFromPointer = (clientY: number): number => {
+	const valueFromPointer = (clientX: number): number => {
 		const rect = trackRef.current!.getBoundingClientRect();
-		const r = clamp(1 - (clientY - rect.top) / rect.height, 0, 1);
+		const r = clamp((clientX - rect.left) / rect.width, 0, 1);
 		let v = min + r * (max - min);
 		if (detent !== undefined && Math.abs(v - detent) < (max - min) * 0.03) {
 			v = detent;
@@ -49,7 +57,7 @@ export default function Fader({
 		e.currentTarget.setPointerCapture(e.pointerId);
 		e.currentTarget.focus();
 		dragging.current = true;
-		onChange(valueFromPointer(e.clientY));
+		onChange(valueFromPointer(e.clientX));
 	};
 
 	const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
@@ -60,7 +68,7 @@ export default function Fader({
 			dragging.current = false;
 			return;
 		}
-		onChange(valueFromPointer(e.clientY));
+		onChange(valueFromPointer(e.clientX));
 	};
 
 	const endDrag = () => {
@@ -69,10 +77,10 @@ export default function Fader({
 
 	const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
 		let next: number | null = null;
-		if (e.key === 'ArrowUp' || e.key === 'ArrowRight') next = value + step;
-		else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') next = value - step;
-		else if (e.key === 'PageUp') next = value + step * 10;
-		else if (e.key === 'PageDown') next = value - step * 10;
+		if (e.key === 'ArrowUp' || e.key === 'ArrowRight') next = clamped + step;
+		else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') next = clamped - step;
+		else if (e.key === 'PageUp') next = clamped + step * 10;
+		else if (e.key === 'PageDown') next = clamped - step * 10;
 		else if (e.key === 'Home') next = min;
 		else if (e.key === 'End') next = max;
 		if (next === null) return;
@@ -80,12 +88,27 @@ export default function Fader({
 		onChange(clamp(Math.round(next / step) * step, min, max));
 	};
 
-	// The fill shows deviation from the detent (like a pitch fader),
-	// or level from the bottom when there is no detent.
+	const startEditing = () => {
+		setDraft(String(clamped));
+		setEditing(true);
+	};
+
+	const commitDraft = () => {
+		const parsed = Number(draft);
+		if (Number.isFinite(parsed)) onChange(clamp(parsed, min, max));
+		setEditing(false);
+	};
+
+	useEffect(() => {
+		if (editing) inputRef.current?.select();
+	}, [editing]);
+
+	// The fill spans from the detent to the current value (like a pitch
+	// fader), or from the start when there is no detent.
 	const fillFrom = ratio(detent ?? min);
-	const fillTo = ratio(value);
-	const fillBottom = Math.min(fillFrom, fillTo) * 100;
-	const fillHeight = Math.abs(fillTo - fillFrom) * 100;
+	const fillTo = ratio(clamped);
+	const fillLeft = Math.min(fillFrom, fillTo) * 100;
+	const fillWidth = Math.abs(fillTo - fillFrom) * 100;
 
 	return (
 		<div className="fader" style={{ '--fader-accent': accent } as CSSProperties}>
@@ -96,11 +119,11 @@ export default function Fader({
 				role="slider"
 				tabIndex={0}
 				aria-label={label}
-				aria-orientation="vertical"
+				aria-orientation="horizontal"
 				aria-valuemin={min}
 				aria-valuemax={max}
-				aria-valuenow={value}
-				aria-valuetext={format(value)}
+				aria-valuenow={clamped}
+				aria-valuetext={format(clamped)}
 				onPointerDown={handlePointerDown}
 				onPointerMove={handlePointerMove}
 				onPointerUp={endDrag}
@@ -111,22 +134,56 @@ export default function Fader({
 				<div className="fader-rail"/>
 				<div
 					className="fader-fill"
-					style={{ bottom: `${fillBottom}%`, height: `${fillHeight}%` }}
+					style={{ left: `${fillLeft}%`, width: `${fillWidth}%` }}
 				/>
 				{ticks.map((t) => (
 					<span
 						key={t}
 						className="fader-tick"
 						data-detent={t === detent || undefined}
-						style={{ bottom: `${ratio(t) * 100}%` }}
+						style={{ left: `${ratio(t) * 100}%` }}
 					/>
 				))}
 				<div
 					className="fader-cap"
-					style={{ bottom: `calc(${ratio(value) * 100}% - 10px)` }}
+					style={{ left: `calc(${ratio(clamped) * 100}% - 10px)` }}
 				/>
 			</div>
-			<output className="fader-value">{format(value)}</output>
+			{editing ? (
+				<input
+					ref={inputRef}
+					className="fader-input"
+					type="text"
+					inputMode="decimal"
+					value={draft}
+					onChange={(e) => setDraft(e.target.value)}
+					onBlur={commitDraft}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter') {
+							e.preventDefault();
+							commitDraft();
+						} else if (e.key === 'Escape') {
+							e.preventDefault();
+							setEditing(false);
+						}
+					}}
+				/>
+			) : (
+				<output
+					className="fader-value"
+					tabIndex={0}
+					title="Click to type a value"
+					onClick={startEditing}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter' || e.key === ' ') {
+							e.preventDefault();
+							startEditing();
+						}
+					}}
+				>
+					{format(clamped)}
+				</output>
+			)}
 		</div>
 	);
 }

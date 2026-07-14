@@ -205,6 +205,14 @@ export class AudioEngine {
 		this.stopSource();
 	}
 
+	/** Stops playback and drops the loaded track. Effect settings survive. */
+	unload(): void {
+		this.stopSource();
+		this.playing = false;
+		this.buffer = null;
+		this.basePos = 0;
+	}
+
 	seek(pos: number): void {
 		if (!this.buffer) return;
 		this.basePos = Math.min(Math.max(pos, 0), this.duration);
