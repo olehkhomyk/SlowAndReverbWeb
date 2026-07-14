@@ -1,5 +1,5 @@
-import SignalsmithStretch from 'signalsmith-stretch'
-import type { StretchNode } from 'signalsmith-stretch'
+import createSignalsmithStretchNode from 'signalsmith-stretch-js'
+import type { SignalsmithStretchNode } from 'signalsmith-stretch-js'
 
 // Live playback graph:
 //
@@ -81,7 +81,7 @@ export class AudioEngine {
 
 	private buffer: AudioBuffer | null = null
 	private source: AudioBufferSourceNode | null = null
-	private pitch: StretchNode | null = null
+	private pitch: SignalsmithStretchNode | null = null
 	private semitones = 0
 	private mix = 0
 	private readonly ready: Promise<void>
@@ -109,7 +109,7 @@ export class AudioEngine {
 	}
 
 	private async initPitch(): Promise<void> {
-		const node = await SignalsmithStretch(this.ctx)
+		const node = await createSignalsmithStretchNode(this.ctx)
 		// Live-input mode needs an active schedule segment before it
 		// passes audio through.
 		await node.schedule({ active: true, semitones: this.semitones })
@@ -227,7 +227,7 @@ export class AudioEngine {
 		// that lead-in and encodeWav trims it so the file starts on time.
 		let latencySeconds = 0
 		if (this.semitones !== 0) {
-			const stretch = await SignalsmithStretch(offline)
+			const stretch = await createSignalsmithStretchNode(offline)
 			await stretch.schedule({ active: true, semitones: this.semitones })
 			latencySeconds = await stretch.latency()
 			source.connect(stretch)

@@ -49,7 +49,7 @@ function App() {
       setPosition(0)
       setError('')
     } catch {
-      setError('Не вдалося прочитати цей файл — спробуй mp3, wav або m4a.')
+      setError("Couldn't read that file — try mp3, wav or m4a.")
     }
   }
 
@@ -100,7 +100,7 @@ function App() {
       setTimeout(() => URL.revokeObjectURL(url), 10_000)
       setError('')
     } catch {
-      setError('Не вдалося відрендерити файл — спробуй ще раз.')
+      setError("Couldn't render the file — try again.")
     } finally {
       setExporting(false)
     }
@@ -160,19 +160,19 @@ function App() {
           <h1 className="wordmark">
             slowed <span aria-hidden="true">&amp;</span> reverb
           </h1>
-          <p className="tagline">Швидкість і реверб наживо, прямо в браузері</p>
+          <p className="tagline">Speed and reverb, live, right in your browser</p>
         </div>
         <div className="masthead-actions">
           <label className="load-button">
             <input type="file" accept="audio/*" onChange={handleFileInput} />
-            Відкрити трек
+            Open track
           </label>
           <button
             className="load-button"
             onClick={() => void handleExport()}
             disabled={!buffer || exporting}
           >
-            {exporting ? 'Рендерю…' : 'Скачати WAV'}
+            {exporting ? 'Rendering…' : 'Download WAV'}
           </button>
         </div>
       </header>
@@ -191,9 +191,9 @@ function App() {
         ) : (
           <label className="drop-zone">
             <input type="file" accept="audio/*" onChange={handleFileInput} />
-            <span className="drop-title">Кинь трек сюди</span>
+            <span className="drop-title">Drop a track here</span>
             <span className="drop-sub">
-              або натисни, щоб вибрати файл — mp3, wav, m4a, flac
+              or click to choose a file — mp3, wav, m4a, flac
             </span>
           </label>
         )}
@@ -206,7 +206,7 @@ function App() {
             className="transport"
             onClick={() => void togglePlay()}
             disabled={!buffer}
-            aria-label={playing ? 'Пауза' : 'Пуск'}
+            aria-label={playing ? 'Pause' : 'Play'}
           >
             {playing ? (
               <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -219,7 +219,7 @@ function App() {
               </svg>
             )}
           </button>
-          <span className="transport-label">{playing ? 'Пауза' : 'Пуск'}</span>
+          <span className="transport-label">{playing ? 'Pause' : 'Play'}</span>
         </div>
 
         <Fader
@@ -260,8 +260,8 @@ function App() {
       </section>
 
       <footer className="hints">
-        Пробіл — пуск/пауза&ensp;·&ensp;клік по хвилі — перемотка&ensp;·&ensp;
-        повзунки працюють під час гри
+        Space — play/pause&ensp;·&ensp;click the waveform to seek&ensp;·&ensp;
+        faders work live during playback
       </footer>
     </main>
   )
