@@ -12,6 +12,8 @@
   --ice-soft: rgba(143, 194, 224, 0.14);
   --violet: #b49ae4;
   --violet-soft: rgba(180, 154, 228, 0.14);
+  --coral: #e0796f;
+  --coral-soft: rgba(224, 121, 111, 0.14);
   --wave-rest: #454052;
 
   --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
