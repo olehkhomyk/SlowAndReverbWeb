@@ -31,9 +31,17 @@
 }
 
 .tagline {
-  margin-top: 10px;
-  font-size: 14px;
-  color: var(--ink-dim);
+  margin-top: 12px;
+  max-width: 52ch;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.tagline-hi {
+  color: var(--amber);
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .masthead-actions {
@@ -61,6 +69,8 @@
 .load-button:hover:not(:disabled) {
   border-color: var(--amber);
   color: var(--amber);
+  background: var(--amber-soft);
+  box-shadow: 0 0 0 1px var(--amber-glow);
 }
 
 .load-button:disabled {
@@ -250,27 +260,30 @@
   justify-content: center;
   gap: 8px;
   min-height: 190px;
-  border: 1px dashed var(--panel-edge);
+  border: 1.5px dashed var(--panel-edge);
   border-radius: 8px;
+  background: var(--amber-faint);
   cursor: pointer;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
 }
 
 .drop-zone:hover,
 .wave-panel.drag .drop-zone {
   border-color: var(--amber);
+  background: var(--amber-soft);
+  box-shadow: inset 0 0 0 1px var(--amber-glow);
 }
 
 .drop-title {
   font-family: var(--mono);
   font-weight: 500;
-  font-size: 22px;
+  font-size: 26px;
   letter-spacing: -0.01em;
   color: var(--ink);
 }
 
 .drop-sub {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--ink-dim);
 }
 
@@ -318,17 +331,23 @@
   flex: 1;
   min-width: 220px;
   font-family: var(--mono);
-  font-size: 13px;
-  padding: 10px 14px;
+  font-size: 14px;
+  padding: 11px 14px;
   border: 1px solid var(--panel-edge);
   border-radius: 6px;
-  background: var(--panel);
+  background: var(--field);
   color: var(--ink);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.yt-input input[type='url']::placeholder {
+  color: var(--ink-dim);
 }
 
 .yt-input input[type='url']:focus {
   outline: none;
   border-color: var(--amber);
+  box-shadow: 0 0 0 3px var(--amber-soft);
 }
 
 .yt-input .load-error {
@@ -337,8 +356,8 @@
 }
 
 .yt-hint {
-  font-size: 12px;
-  line-height: 1.5;
+  font-size: 13px;
+  line-height: 1.55;
   color: var(--ink-dim);
 }
 

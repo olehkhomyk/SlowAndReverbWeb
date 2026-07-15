@@ -206,8 +206,10 @@ function App() {
 						</span>
 					</h1>
 					<p className="tagline">
-						Slow down a track, shift its pitch, add reverb and boost the
-						bass — live in your browser
+						Slow down any track — drop a file or paste a{' '}
+						<span className="tagline-hi">YouTube / YouTube Music</span> link —
+						then shift its pitch, add reverb and boost the bass, live in your
+						browser.
 					</p>
 				</div>
 				<div className="masthead-actions">

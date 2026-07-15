@@ -1,13 +1,16 @@
 :root {
   /* The room: warm charcoal, backlit-meter amber for tape speed,
      ice blue for reverb space. */
-  --room: #0e0d11;
-  --panel: #17151c;
-  --panel-edge: #29252f;
-  --ink: #ece7dc;
-  --ink-dim: #8b8496;
-  --amber: #f0a43e;
+  --room: #100e14;
+  --panel: #1e1b25;
+  --panel-edge: #3a3444;
+  --field: #262330;
+  --ink: #f2eee5;
+  --ink-dim: #aaa2b8;
+  --amber: #f6ac47;
   --amber-soft: rgba(240, 164, 62, 0.16);
+  --amber-faint: rgba(240, 164, 62, 0.06);
+  --amber-glow: rgba(240, 164, 62, 0.28);
   --ice: #8fc2e0;
   --ice-soft: rgba(143, 194, 224, 0.14);
   --violet: #b49ae4;
