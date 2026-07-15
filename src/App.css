@@ -336,6 +336,12 @@
   margin-top: 0;
 }
 
+.yt-hint {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-dim);
+}
+
 .yt-progress {
   flex-basis: 100%;
   width: 100%;

@@ -276,6 +276,10 @@ function App() {
 						<YouTubeInput
 							onLoad={(file) => loadFile(file, 'YouTube audio')}
 						/>
+						<p className="yt-hint">
+							Paste a link to a YouTube video, a YouTube song or a YouTube
+							Music track — up to 10 minutes long.
+						</p>
 					</div>
 				)}
 				{error && <p className="load-error">{error}</p>}
