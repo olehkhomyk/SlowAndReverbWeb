@@ -1,6 +1,5 @@
 import createSignalsmithStretchNode from 'signalsmith-stretch-js';
 import type { SignalsmithStretchNode } from 'signalsmith-stretch-js';
-import { Mp3Encoder } from '@breezystack/lamejs';
 
 // Live playback graph:
 //
@@ -84,12 +83,16 @@ function toInt16(samples: Float32Array, start: number, end: number): Int16Array 
 	return out;
 }
 
-function encodeMp3(
+async function encodeMp3(
 	buffer: AudioBuffer,
 	skipSeconds: number,
 	keepSeconds: number,
 	kbps = 192,
-): Blob {
+): Promise<Blob> {
+	// Loaded on demand: the LAME encoder is only needed once the user picks
+	// MP3 in the download menu, so it stays out of the initial bundle.
+	const { Mp3Encoder } = await import('@breezystack/lamejs');
+
 	const sampleRate = buffer.sampleRate;
 	const channels = Math.min(2, buffer.numberOfChannels);
 	const start = Math.min(Math.floor(skipSeconds * sampleRate), buffer.length);

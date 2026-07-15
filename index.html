@@ -2,40 +2,84 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0e0d11" />
 
-    <title>Slowed + Reverb — Free Online Audio Editor</title>
+    <title>Slowed + Reverb Editor — Slow Down & Pitch Shift Songs Online</title>
     <meta
       name="description"
-      content="Slow down, pitch-shift, add reverb and boost bass on any track live in your browser. No upload, no signup — drop an mp3, wav, m4a or flac and download the result as WAV or MP3."
-    />
-    <meta
-      name="keywords"
-      content="slowed reverb, slowed and reverb online, audio pitch shifter, bass booster online, free audio editor, mp3 to slowed reverb"
+      content="Slow down any track, shift its pitch, add reverb and boost the bass — live in your browser. No upload, no signup. Export to WAV or MP3, free."
     />
     <link rel="canonical" href="https://slowedreverb.app/" />
 
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Open Graph / Twitter -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Slowed + Reverb — Free Online Audio Editor" />
+    <meta property="og:site_name" content="Slowed + Reverb" />
+    <meta
+      property="og:title"
+      content="Slowed + Reverb Editor — Slow Down & Pitch Shift Songs Online"
+    />
     <meta
       property="og:description"
-      content="Slow down, pitch-shift, add reverb and boost bass on any track live in your browser. No upload, no signup required."
+      content="Slow down any track, shift its pitch, add reverb and boost the bass — live in your browser. No upload, no signup. Export to WAV or MP3, free."
     />
     <meta property="og:url" content="https://slowedreverb.app/" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Slowed + Reverb — Free Online Audio Editor" />
+    <meta property="og:image" content="https://slowedreverb.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Slowed and reverb audio editor showing a waveform and speed, pitch, reverb and bass controls"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Slowed + Reverb Editor — Slow Down & Pitch Shift Songs Online"
+    />
     <meta
       name="twitter:description"
-      content="Slow down, pitch-shift, add reverb and boost bass on any track live in your browser."
+      content="Slow down any track, shift its pitch, add reverb and boost the bass — live in your browser. No upload, no signup."
     />
+    <meta name="twitter:image" content="https://slowedreverb.app/og-image.png" />
 
+    <!-- The only third-party origin the page hits: warm it up early so the
+         font does not delay first paint. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
       rel="stylesheet"
     />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Slowed + Reverb Editor",
+        "url": "https://slowedreverb.app/",
+        "description": "Browser-based audio editor that slows tracks down, shifts pitch independently of speed, adds reverb and boosts bass in real time, then exports to WAV or MP3.",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires a browser with Web Audio API support",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": [
+          "Slow down or speed up a track",
+          "Pitch shift independently of playback speed",
+          "Reverb",
+          "Bass boost",
+          "Export to WAV or MP3"
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

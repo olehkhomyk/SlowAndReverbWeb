@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent, DragEvent } from 'react';
 import DownloadMenu from './components/DownloadMenu';
 import type { ExportFormat } from './components/DownloadMenu';
-import { AudioEngine } from './audio/engine';
+import type { AudioEngine } from './audio/engine';
 import Fader from './components/Fader';
 import Waveform from './components/Waveform';
+import YouTubeInput from './components/YouTubeInput';
 import './App.css';
 
 function formatTime(seconds: number): string {
@@ -27,8 +28,13 @@ function App() {
 	const [dragOver, setDragOver] = useState(false);
 	const [exporting, setExporting] = useState(false);
 
-	const getEngine = (): AudioEngine => {
+	// The engine module pulls in the WASM pitch shifter, so it is loaded on
+	// first use — i.e. when the user actually picks a track — rather than on
+	// page load. AudioContext is likewise only constructed here, inside a
+	// user gesture, which is what the browser autoplay policy requires.
+	const getEngine = async (): Promise<AudioEngine> => {
 		if (!engineRef.current) {
+			const { AudioEngine } = await import('./audio/engine');
 			const engine = new AudioEngine();
 			engine.onTrackEnd = () => {
 				setPlaying(false);
@@ -39,8 +45,8 @@ function App() {
 		return engineRef.current;
 	};
 
-	const loadFile = async (file: File) => {
-		const engine = getEngine();
+	const loadFile = async (file: File, displayName?: string) => {
+		const engine = await getEngine();
 		try {
 			const decoded = await engine.load(file);
 			engine.setRate(speed);
@@ -48,7 +54,7 @@ function App() {
 			engine.setReverb(reverb);
 			engine.setBassBoost(bass);
 			setBuffer(decoded);
-			setTrackName(file.name.replace(/\.[^.]+$/, ''));
+			setTrackName(displayName ?? file.name.replace(/\.[^.]+$/, ''));
 			setPlaying(false);
 			setPosition(0);
 			setError('');
@@ -190,10 +196,19 @@ function App() {
 		>
 			<header className="masthead">
 				<div>
+					{/* The wordmark is the visible brand; the rest of the h1 names what
+					    the page actually is, for search engines and screen readers. */}
 					<h1 className="wordmark">
 						slowed <span aria-hidden="true">&amp;</span> reverb
+						<span className="visually-hidden">
+							{' '}— free online audio editor to slow down songs, shift pitch,
+							add reverb and boost bass
+						</span>
 					</h1>
-					<p className="tagline">Speed and reverb, live, right in your browser</p>
+					<p className="tagline">
+						Slow down a track, shift its pitch, add reverb and boost the
+						bass — live in your browser
+					</p>
 				</div>
 				<div className="masthead-actions">
 					<label className="load-button">
@@ -249,13 +264,19 @@ function App() {
 						</div>
 					</>
 				) : (
-					<label className="drop-zone">
-						<input type="file" accept="audio/*" onChange={handleFileInput}/>
-						<span className="drop-title">Drop a track here</span>
-						<span className="drop-sub">
-              or click to choose a file — mp3, wav, m4a, flac
-            </span>
-					</label>
+					<div className="empty-state">
+						<label className="drop-zone">
+							<input type="file" accept="audio/*" onChange={handleFileInput}/>
+							<span className="drop-title">Drop a track here</span>
+							<span className="drop-sub">
+                or click to choose a file — mp3, wav, m4a, flac
+              </span>
+						</label>
+						<div className="empty-divider"><span>or paste a YouTube link</span></div>
+						<YouTubeInput
+							onLoad={(file) => loadFile(file, 'YouTube audio')}
+						/>
+					</div>
 				)}
 				{error && <p className="load-error">{error}</p>}
 			</section>
