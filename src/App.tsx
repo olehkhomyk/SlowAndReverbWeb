@@ -326,16 +326,94 @@ function App() {
 			</footer>
 
 			<section className="about">
-				<h2>A slowed + reverb editor that runs entirely in your browser</h2>
+				<h2>Slowed and reverb, without uploading anything</h2>
 				<p>
 					Drop in any mp3, wav, m4a or flac and shape it live: slow the
-					tempo down for that classic slowed sound, shift the pitch up or
-					down independently of speed, layer in reverb for space and depth,
-					or push the bass for more weight. Every fader updates the sound
-					instantly while it plays — nothing is uploaded to a server, and
-					nothing is processed until you hit play. When you're happy with
-					the mix, download it as a lossless WAV or a compressed MP3.
+					tempo down for that classic slowed sound, layer in reverb for
+					space and depth, or push the bass for more weight. This is
+					browser-based slowed + reverb with no signup — speed and pitch
+					sit on separate faders, so you can change pitch and speed
+					separately, entirely online, in this tab. Slow a track down and
+					dial the tone back to keep the pitch you started with, or lean
+					into the pitch drop for a different mood. Every fader updates
+					the sound instantly while it plays: nothing is uploaded to a
+					server, and nothing is processed until you hit play. When
+					you're happy with the mix, download it as a lossless WAV or a
+					compressed MP3.
 				</p>
+			</section>
+
+			<section className="faq">
+				<h2>Frequently asked questions</h2>
+				<dl>
+					<div className="faq-item">
+						<dt>What is slowed + reverb?</dt>
+						<dd>
+							A remix style where a track is slowed down and washed in
+							reverb, giving it a hazy, underwater, nostalgic feel. This
+							editor lets you dial in the speed, pitch, reverb and bass
+							yourself and hear the result change live, instead of
+							downloading someone else's fixed version.
+						</dd>
+					</div>
+					<div className="faq-item">
+						<dt>Does this upload my audio anywhere?</dt>
+						<dd>
+							No — everything runs locally in your browser. There's no
+							server, no upload queue and no account; the file you drop
+							in never leaves your device.
+						</dd>
+					</div>
+					<div className="faq-item">
+						<dt>
+							Can I slow a song down without making it sound lower /
+							chipmunked?
+						</dt>
+						<dd>
+							Yes. Slowing playback down naturally drops the pitch too —
+							that's the classic tape-style slowed sound — but the pitch
+							fader runs independently of speed, so you can nudge it
+							back up to keep the pitch you started with, or push it
+							further for a more dramatic effect.
+						</dd>
+					</div>
+					<div className="faq-item">
+						<dt>
+							What's the difference between slowed + reverb, daycore and
+							nightcore?
+						</dt>
+						<dd>
+							Nightcore speeds a track up and raises the pitch for a
+							brighter, more energetic feel. Daycore and slowed + reverb
+							both slow it down and drop the pitch; slowed + reverb adds
+							a heavy reverb wash on top for that hazy, spaced-out
+							texture, while daycore usually stays drier.
+						</dd>
+					</div>
+					<div className="faq-item">
+						<dt>What audio formats are supported?</dt>
+						<dd>
+							Drop in mp3, wav, m4a or flac. Export the result as a
+							lossless WAV or a 192&nbsp;kbps MP3.
+						</dd>
+					</div>
+					<div className="faq-item">
+						<dt>Can I use this on my phone?</dt>
+						<dd>
+							Yes — it's a normal web page built on the Web Audio API,
+							so it runs in modern mobile browsers the same way it does
+							on desktop, no app install required.
+						</dd>
+					</div>
+					<div className="faq-item">
+						<dt>Is the export lossless?</dt>
+						<dd>
+							WAV export is lossless 16-bit PCM. MP3 export is
+							compressed at 192&nbsp;kbps if you'd rather have a smaller
+							file.
+						</dd>
+					</div>
+				</dl>
 			</section>
 		</main>
 	);

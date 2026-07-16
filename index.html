@@ -10,11 +10,7 @@
       name="description"
       content="Slow down, pitch-shift, add reverb and boost bass on any track live in your browser. No upload, no signup — drop an mp3, wav, m4a or flac and download the result as WAV or MP3."
     />
-    <meta
-      name="keywords"
-      content="slowed reverb, slowed and reverb online, audio pitch shifter, bass booster online, free audio editor, mp3 to slowed reverb"
-    />
-    <link rel="canonical" href="https://slowedreverb.app/" />
+    <link rel="canonical" href="%VITE_SITE_URL%" />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Slowed + Reverb — Free Online Audio Editor" />
@@ -22,19 +18,121 @@
       property="og:description"
       content="Slow down, pitch-shift, add reverb and boost bass on any track live in your browser. No upload, no signup required."
     />
-    <meta property="og:url" content="https://slowedreverb.app/" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:url" content="%VITE_SITE_URL%" />
+    <meta property="og:image" content="%VITE_SITE_URL%og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Slowed + Reverb — Free Online Audio Editor" />
     <meta
       name="twitter:description"
       content="Slow down, pitch-shift, add reverb and boost bass on any track live in your browser."
     />
+    <meta name="twitter:image" content="%VITE_SITE_URL%og-image.png" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Slowed + Reverb",
+        "url": "%VITE_SITE_URL%",
+        "description": "Slow down, pitch-shift, add reverb and boost bass on any track live in your browser. No upload, no signup — drop an mp3, wav, m4a or flac and download the result as WAV or MP3.",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Any (browser-based)",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": [
+          "Adjustable playback speed",
+          "Pitch shift independent of speed",
+          "Reverb",
+          "Bass boost",
+          "Export as WAV or MP3",
+          "Runs entirely in the browser — no upload"
+        ]
+      }
+    </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is slowed + reverb?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A remix style where a track is slowed down and washed in reverb, giving it a hazy, underwater, nostalgic feel. This editor lets you dial in the speed, pitch, reverb and bass yourself and hear the result change live, instead of downloading someone else's fixed version."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does this upload my audio anywhere?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No — everything runs locally in your browser. There's no server, no upload queue and no account; the file you drop in never leaves your device."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I slow a song down without making it sound lower / chipmunked?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Slowing playback down naturally drops the pitch too — that's the classic tape-style slowed sound — but the pitch fader runs independently of speed, so you can nudge it back up to keep the pitch you started with, or push it further for a more dramatic effect."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What's the difference between slowed + reverb, daycore and nightcore?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nightcore speeds a track up and raises the pitch for a brighter, more energetic feel. Daycore and slowed + reverb both slow it down and drop the pitch; slowed + reverb adds a heavy reverb wash on top for that hazy, spaced-out texture, while daycore usually stays drier."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What audio formats are supported?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Drop in mp3, wav, m4a or flac. Export the result as a lossless WAV or a 192 kbps MP3."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use this on my phone?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes — it's a normal web page built on the Web Audio API, so it runs in modern mobile browsers the same way it does on desktop, no app install required."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is the export lossless?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "WAV export is lossless 16-bit PCM. MP3 export is compressed at 192 kbps if you'd rather have a smaller file."
+            }
+          }
+        ]
+      }
+    </script>
+
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="/fonts/jetbrains-mono-latin-400-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/jetbrains-mono-latin-500-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
   </head>
   <body>

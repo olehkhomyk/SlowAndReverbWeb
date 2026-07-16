@@ -536,6 +536,43 @@
   color: var(--ink-dim);
 }
 
+/* ── FAQ (SEO copy) ───────────────────────────────────────── */
+
+.faq {
+  max-width: 640px;
+  margin: 8px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--panel-edge);
+  text-align: left;
+}
+
+.faq h2 {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+
+.faq-item + .faq-item {
+  margin-top: 16px;
+}
+
+.faq-item dt {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.faq-item dd {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-dim);
+  margin: 0;
+}
+
 /* Too narrow to fit label, track and value side by side: stack them into
    two rows, with the track spanning the full width underneath. The areas
    are named because the DOM order is label, track, value. */
