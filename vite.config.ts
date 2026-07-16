@@ -1,12 +1,14 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
 // Backend origin for the youtube-downloader-api. Override with BACKEND_URL.
 const backend = process.env.BACKEND_URL ?? 'http://localhost:3000'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), cloudflare()],
   server: {
     // Proxy API + file downloads to the backend so the browser talks to a
     // single origin in dev — no CORS needed.
