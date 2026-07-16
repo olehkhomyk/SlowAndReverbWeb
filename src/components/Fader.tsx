@@ -149,6 +149,7 @@ export default function Fader({
 					style={{ left: `calc(${ratio(clamped) * 100}% - 10px)` }}
 				/>
 			</div>
+
 			{editing ? (
 				<input
 					ref={inputRef}
