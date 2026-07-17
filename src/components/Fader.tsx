@@ -13,6 +13,7 @@ interface FaderProps {
 	accent: string;
 	format: (value: number) => string;
 	onChange: (value: number) => void;
+	disabled?: boolean;
 }
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
@@ -28,6 +29,7 @@ export default function Fader({
 	                              accent,
 	                              format,
 	                              onChange,
+	                              disabled = false,
                               }: FaderProps) {
 	const trackRef = useRef<HTMLDivElement>(null);
 	const dragging = useRef(false);
@@ -53,6 +55,7 @@ export default function Fader({
 	};
 
 	const handlePointerDown = (e: PointerEvent<HTMLDivElement>) => {
+		if (disabled) return;
 		e.preventDefault();
 		e.currentTarget.setPointerCapture(e.pointerId);
 		e.currentTarget.focus();
@@ -61,7 +64,7 @@ export default function Fader({
 	};
 
 	const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
-		if (!dragging.current) return;
+		if (!dragging.current || disabled) return;
 		// If the button was released where we couldn't see it (capture lost,
 		// pointer left the window), stop following the cursor.
 		if (e.buttons === 0) {
@@ -76,6 +79,7 @@ export default function Fader({
 	};
 
 	const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+		if (disabled) return;
 		let next: number | null = null;
 		if (e.key === 'ArrowUp' || e.key === 'ArrowRight') next = clamped + step;
 		else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') next = clamped - step;
@@ -89,6 +93,7 @@ export default function Fader({
 	};
 
 	const startEditing = () => {
+		if (disabled) return;
 		setDraft(String(clamped));
 		setEditing(true);
 	};
@@ -111,13 +116,17 @@ export default function Fader({
 	const fillWidth = Math.abs(fillTo - fillFrom) * 100;
 
 	return (
-		<div className="fader" style={{ '--fader-accent': accent } as CSSProperties}>
+		<div
+			className="fader"
+			data-disabled={disabled || undefined}
+			style={{ '--fader-accent': accent } as CSSProperties}
+		>
 			<span className="fader-label">{label}</span>
 			<div
 				ref={trackRef}
 				className="fader-track"
 				role="slider"
-				tabIndex={0}
+				tabIndex={disabled ? -1 : 0}
 				aria-label={label}
 				aria-orientation="horizontal"
 				aria-valuemin={min}
@@ -172,8 +181,8 @@ export default function Fader({
 			) : (
 				<output
 					className="fader-value"
-					tabIndex={0}
-					title="Click to type a value"
+					tabIndex={disabled ? -1 : 0}
+					title={disabled ? undefined : 'Click to type a value'}
 					onClick={startEditing}
 					onKeyDown={(e) => {
 						if (e.key === 'Enter' || e.key === ' ') {

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type { ChangeEvent, DragEvent } from 'react';
+import type { ChangeEvent, CSSProperties, DragEvent } from 'react';
 import DownloadMenu from './components/DownloadMenu';
 import type { ExportFormat } from './components/DownloadMenu';
 import { AudioEngine } from './audio/engine';
@@ -23,6 +23,10 @@ function App() {
 	const [pitch, setPitch] = useState(0);
 	const [reverb, setReverb] = useState(0);
 	const [bass, setBass] = useState(0);
+	const [speedOn, setSpeedOn] = useState(true);
+	const [pitchOn, setPitchOn] = useState(true);
+	const [reverbOn, setReverbOn] = useState(true);
+	const [bassOn, setBassOn] = useState(true);
 	const [error, setError] = useState('');
 	const [dragOver, setDragOver] = useState(false);
 	const [exporting, setExporting] = useState(false);
@@ -43,10 +47,10 @@ function App() {
 		const engine = getEngine();
 		try {
 			const decoded = await engine.load(file);
-			engine.setRate(speed);
-			engine.setPitch(pitch);
-			engine.setReverb(reverb);
-			engine.setBassBoost(bass);
+			engine.setRate(speedOn ? speed : 1);
+			engine.setPitch(pitchOn ? pitch : 0);
+			engine.setReverb(reverbOn ? reverb : 0);
+			engine.setBassBoost(bassOn ? bass : 0);
 			setBuffer(decoded);
 			setTrackName(file.name.replace(/\.[^.]+$/, ''));
 			setPlaying(false);
@@ -95,7 +99,32 @@ function App() {
 		engineRef.current?.setBassBoost(value);
 	};
 
-	const isDefault = speed === 1 && pitch === 0 && reverb === 0 && bass === 0;
+	const handleSpeedToggle = () => {
+		const next = !speedOn;
+		setSpeedOn(next);
+		engineRef.current?.setRate(next ? speed : 1);
+	};
+
+	const handlePitchToggle = () => {
+		const next = !pitchOn;
+		setPitchOn(next);
+		engineRef.current?.setPitch(next ? pitch : 0);
+	};
+
+	const handleReverbToggle = () => {
+		const next = !reverbOn;
+		setReverbOn(next);
+		engineRef.current?.setReverb(next ? reverb : 0);
+	};
+
+	const handleBassToggle = () => {
+		const next = !bassOn;
+		setBassOn(next);
+		engineRef.current?.setBassBoost(next ? bass : 0);
+	};
+
+	const isDefault = speed === 1 && pitch === 0 && reverb === 0 && bass === 0
+		&& speedOn && pitchOn && reverbOn && bassOn;
 
 	const handleReset = () => {
 		const engine = engineRef.current;
@@ -103,6 +132,10 @@ function App() {
 		setPitch(0);
 		setReverb(0);
 		setBass(0);
+		setSpeedOn(true);
+		setPitchOn(true);
+		setReverbOn(true);
+		setBassOn(true);
 		engine?.setRate(1);
 		engine?.setPitch(0);
 		engine?.setReverb(0);
@@ -214,8 +247,8 @@ function App() {
 						<div className="track-bar">
 							<span className="track-name">{trackName}</span>
 							<span className="track-time">
-                <b>{formatTime(position)}</b> / {formatTime(buffer.duration)}
-              </span>
+								<b>{formatTime(position)}</b> / {formatTime(buffer.duration)}
+							</span>
 							<button
 								className="icon-button"
 								onClick={handleRemoveTrack}
@@ -253,8 +286,8 @@ function App() {
 						<input type="file" accept="audio/*" onChange={handleFileInput}/>
 						<span className="drop-title">Drop a track here</span>
 						<span className="drop-sub">
-              or click to choose a file — mp3, wav, m4a, flac
-            </span>
+							or click to choose a file — mp3, wav, m4a, flac
+						</span>
 					</label>
 				)}
 				{error && <p className="load-error">{error}</p>}
@@ -272,52 +305,80 @@ function App() {
 			</div>
 
 			<section className="console">
-				<Fader
-					label="Speed"
-					value={speed}
-					min={0.5}
-					max={1.5}
-					step={0.01}
-					detent={1}
-					ticks={[0.5, 0.75, 1, 1.25, 1.5]}
-					accent="var(--amber)"
-					format={(v) => `×${v.toFixed(2)}`}
-					onChange={handleSpeed}
-				/>
-				<Fader
-					label="Pitch"
-					value={pitch}
-					min={-12}
-					max={12}
-					step={1}
-					detent={0}
-					ticks={[-12, -6, 0, 6, 12]}
-					accent="var(--violet)"
-					format={(v) => `${v > 0 ? '+' : ''}${v} st`}
-					onChange={handlePitch}
-				/>
-				<Fader
-					label="Reverb"
-					value={reverb}
-					min={0}
-					max={1}
-					step={0.01}
-					ticks={[0, 0.25, 0.5, 0.75, 1]}
-					accent="var(--ice)"
-					format={(v) => `${Math.round(v * 100)}%`}
-					onChange={handleReverb}
-				/>
-				<Fader
-					label="Bass"
-					value={bass}
-					min={0}
-					max={12}
-					step={0.5}
-					ticks={[0, 3, 6, 9, 12]}
-					accent="var(--coral)"
-					format={(v) => `+${v.toFixed(1)} dB`}
-					onChange={handleBass}
-				/>
+				<div className="fader-row">
+					<label className="effect-toggle" title={speedOn ? 'Disable speed' : 'Enable speed'}>
+						<input type="checkbox" checked={speedOn} onChange={handleSpeedToggle} />
+						<span className="toggle-dot" style={{ '--toggle-accent': 'var(--amber)' } as CSSProperties} />
+					</label>
+					<Fader
+						label="Speed"
+						value={speed}
+						min={0.5}
+						max={1.5}
+						step={0.01}
+						detent={1}
+						ticks={[0.5, 0.75, 1, 1.25, 1.5]}
+						accent="var(--amber)"
+						format={(v) => `×${v.toFixed(2)}`}
+						onChange={handleSpeed}
+						disabled={!speedOn}
+					/>
+				</div>
+				<div className="fader-row">
+					<label className="effect-toggle" title={pitchOn ? 'Disable pitch' : 'Enable pitch'}>
+						<input type="checkbox" checked={pitchOn} onChange={handlePitchToggle} />
+						<span className="toggle-dot" style={{ '--toggle-accent': 'var(--violet)' } as CSSProperties} />
+					</label>
+					<Fader
+						label="Pitch"
+						value={pitch}
+						min={-12}
+						max={12}
+						step={1}
+						detent={0}
+						ticks={[-12, -6, 0, 6, 12]}
+						accent="var(--violet)"
+						format={(v) => `${v > 0 ? '+' : ''}${v} st`}
+						onChange={handlePitch}
+						disabled={!pitchOn}
+					/>
+				</div>
+				<div className="fader-row">
+					<label className="effect-toggle" title={reverbOn ? 'Disable reverb' : 'Enable reverb'}>
+						<input type="checkbox" checked={reverbOn} onChange={handleReverbToggle} />
+						<span className="toggle-dot" style={{ '--toggle-accent': 'var(--ice)' } as CSSProperties} />
+					</label>
+					<Fader
+						label="Reverb"
+						value={reverb}
+						min={0}
+						max={1}
+						step={0.01}
+						ticks={[0, 0.25, 0.5, 0.75, 1]}
+						accent="var(--ice)"
+						format={(v) => `${Math.round(v * 100)}%`}
+						onChange={handleReverb}
+						disabled={!reverbOn}
+					/>
+				</div>
+				<div className="fader-row">
+					<label className="effect-toggle" title={bassOn ? 'Disable bass' : 'Enable bass'}>
+						<input type="checkbox" checked={bassOn} onChange={handleBassToggle} />
+						<span className="toggle-dot" style={{ '--toggle-accent': 'var(--coral)' } as CSSProperties} />
+					</label>
+					<Fader
+						label="Bass"
+						value={bass}
+						min={0}
+						max={12}
+						step={0.5}
+						ticks={[0, 3, 6, 9, 12]}
+						accent="var(--coral)"
+						format={(v) => `+${v.toFixed(1)} dB`}
+						onChange={handleBass}
+						disabled={!bassOn}
+					/>
+				</div>
 			</section>
 
 			<footer className="hints">

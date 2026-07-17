@@ -360,6 +360,87 @@
   gap: 12px;
 }
 
+/* ── Fader row + effect toggle ─────────────────────────────── */
+
+.fader-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fader-row .fader {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.effect-toggle {
+  flex: 0 0 auto;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.effect-toggle:hover {
+  background: var(--panel);
+}
+
+.effect-toggle input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.toggle-dot {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--panel-edge);
+  background: transparent;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.effect-toggle input:checked + .toggle-dot {
+  background: var(--toggle-accent);
+  border-color: var(--toggle-accent);
+  box-shadow: 0 0 10px var(--toggle-accent);
+}
+
+.effect-toggle:hover .toggle-dot {
+  border-color: var(--ink-dim);
+}
+
+.effect-toggle input:checked + .toggle-dot:hover {
+  border-color: var(--ink);
+}
+
+/* ── Disabled fader ────────────────────────────────────────── */
+
+.fader[data-disabled] {
+  opacity: 0.45;
+}
+
+.fader[data-disabled] .fader-fill {
+  background: var(--panel-edge);
+}
+
+.fader[data-disabled] .fader-cap::after {
+  background: var(--ink-dim);
+}
+
+.fader[data-disabled] .fader-value {
+  color: var(--ink-dim);
+}
+
+.fader[data-disabled] .fader-track {
+  cursor: default;
+}
+
 /* One row on desktop: label | track | value. The track is horizontal at
    every width — it just gets its own row below the label and value once
    the screen is too narrow to fit all three side by side. */
